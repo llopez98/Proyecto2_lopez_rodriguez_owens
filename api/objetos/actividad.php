@@ -16,6 +16,10 @@ class Actividad
     public $repetir_final;
     public $tipo;
     public $hora;
+
+	public $filtro;
+	public $valor;
+
 	// constructor con $db como conexion a base de datos
 	public function __construct($db)
 	{
@@ -44,26 +48,39 @@ class Actividad
 		// obtener fila recuperada
 		return $stmt;
 	}
-/*
-	// crear producto
-	function crear()
-	{
-		// query para insertar un registro
-		$query = "INSERT INTO " . $this->nombre_tabla . " SET nombre=:nombre, precio=:precio, descripcion=:descripcion, categoria_id=:categoria_id, creado=:creado";
-		// preparar query
+
+	function obtener_actividad_dia(){
+		$query = "CALL sp_listar_actividades()";
 		$stmt = $this->conn->prepare($query);
-		// sanitize
-		$this->nombre = htmlspecialchars(strip_tags($this->nombre));
-		$this->precio = htmlspecialchars(strip_tags($this->precio));
-		$this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
-		$this->categoria_id = htmlspecialchars(strip_tags($this->categoria_id));
-		$this->creado = htmlspecialchars(strip_tags($this->creado));
+		$stmt->execute();
+		return $stmt;
+	}
+
+	function obtener_actividad_filtro(){
+		$query = "CALL sp_listar_actividades_filtro(?,?)";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(1, $this->filtro);
+		$stmt->bindParam(2, $this->valor);
+		$stmt->execute();
+		return $stmt;
+	}
+
+	function registrar()
+	{
+		$query = "CALL sp_registrar_actividades(?,?,?,?,?,?,?,?,?)";
+		$stmt = $this->conn->prepare($query);
+		
 		// bind values
-		$stmt->bindParam(":nombre", $this->nombre);
-		$stmt->bindParam(":precio", $this->precio);
-		$stmt->bindParam(":descripcion", $this->descripcion);
-		$stmt->bindParam(":categoria_id", $this->categoria_id);
-		$stmt->bindParam(":creado", $this->creado);
+		$stmt->bindParam(1, $this->titulo);
+		$stmt->bindParam(2, $this->fecha);
+		$stmt->bindParam(9, $this->hora);
+		$stmt->bindParam(3, $this->ubicacion);
+		$stmt->bindParam(4, $this->correo);
+		$stmt->bindParam(5, $this->repetir);
+		$stmt->bindParam(6, $this->repetir_inicio);
+		$stmt->bindParam(7, $this->repetir_final);
+		$stmt->bindParam(8, $this->tipo);
+
 		// execute query
 		if ($stmt->execute()) {
 			return true;
@@ -71,25 +88,36 @@ class Actividad
 		return false;
 	}
 
-	// utilizado al completar el formulario de actualización del producto
-	function readOne()
-	{
-		// consulta para leer un solo registro
-		$query = "SELECT c.nombre as categoria_desc, p.id, p.nombre, p.descripcion, p.precio, p.categoria_id, p.creado FROM " . $this->nombre_tabla . " p LEFT JOIN categorias c ON p.categoria_id = c.id WHERE p.id = ? LIMIT 0,1";
-		// preparar declaración de consulta
+	function actualizar(){
+		$query = "CALL sp_actualizar_actividad(?,?,?,?,?,?,?,?,?,?)";
 		$stmt = $this->conn->prepare($query);
-		// ID de enlace del producto a actualizar
+
 		$stmt->bindParam(1, $this->id);
-		// ejecutar consulta
-		$stmt->execute();
-		// obtener fila recuperada
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		// establecer valores a las propiedades del objeto
-		$this->nombre = $row['nombre'];
-		$this->precio = $row['precio'];
-		$this->descripcion = $row['descripcion'];
-		$this->categoria_id = $row['categoria_id'];
-		$this->categoria_desc = $row['categoria_desc'];
-	}*/
+		$stmt->bindParam(2, $this->titulo);
+		$stmt->bindParam(3, $this->fecha);
+		$stmt->bindParam(10, $this->hora);
+		$stmt->bindParam(4, $this->ubicacion);
+		$stmt->bindParam(5, $this->correo);
+		$stmt->bindParam(6, $this->repetir);
+		$stmt->bindParam(7, $this->repetir_inicio);
+		$stmt->bindParam(8, $this->repetir_final);
+		$stmt->bindParam(9, $this->tipo);
+
+		if($stmt->execute()){
+			return true;
+		}
+		return false;
+	}
+
+	function eliminar(){
+		$query = "CALL sp_eliminar_actividad(?)";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(1, $this->id);
+		
+		if($stmt->execute()){
+			return true;
+		}
+		return false;
+	}
 }
 ?>
