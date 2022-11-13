@@ -17,8 +17,6 @@ $actividad->valor = isset($_GET['valor']) ? $_GET['valor'] : die();
 // query productos
 $stmt = $actividad->obtener_actividad_filtro();
 $num = $stmt->rowCount();
-// verificar si hay mas de 0 registros encontrados
-if ($num > 0) {
     // arreglo de actividades
     $actividades_arr = array();
     $actividades_arr["records"] = array();
@@ -46,12 +44,5 @@ if ($num > 0) {
     http_response_code(200);
     // mostrar productos en formato json
     echo json_encode($actividades_arr);
-} else {
-    // asignar codigo de respuesta - 404 No encontrado
-    http_response_code(404);
-    // informarle al usuario que no se encontraron productos
-    echo json_encode(
-        array("message" => "No se encontró la actividad.")
-    );
-}
+
 ?>
