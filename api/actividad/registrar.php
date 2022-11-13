@@ -19,7 +19,6 @@
     !empty($data->hora) &&
     !empty($data->ubicacion) &&
     !empty($data->correo) &&
-    !empty($data->repetir) &&
     !empty($data->repetir_inicio) &&
     !empty($data->repetir_final) &&
     !empty($data->tipo) 
