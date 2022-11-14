@@ -41,11 +41,8 @@ class Actividad
 	function obtener_actividad(){
 		$query = "CALL sp_obtener_actividad(?)";
 		$stmt = $this->conn->prepare($query);
-		// ID de enlace del producto a actualizar
 		$stmt->bindParam(1, $this->id);
-		// ejecutar consulta
 		$stmt->execute();
-		// obtener fila recuperada
 		return $stmt;
 	}
 
