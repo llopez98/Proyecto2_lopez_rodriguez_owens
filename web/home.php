@@ -27,7 +27,7 @@
 
     <br>
     <?php
-    $response = json_decode(file_get_contents('http://localhost/proyecto2_lopez_rodriguez_owens/api/actividad/leer.php'));
+    $response = json_decode(file_get_contents('http://localhost/proyecto2_lopez_rodriguez_owens/api/actividad/leer_dia.php'));
     $actividades = $response->records;
 
     $nfilas = count($actividades);

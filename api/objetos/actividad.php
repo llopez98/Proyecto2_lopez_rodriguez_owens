@@ -3,7 +3,6 @@ class Actividad
 {
 	// conexion de base de datos y tabla actividades
 	private $conn;
-	private $nombre_tabla = "actividades";
 
 	// atributos de la clase
 	public $id;

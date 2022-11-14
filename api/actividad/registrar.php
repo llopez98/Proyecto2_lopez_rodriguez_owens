@@ -39,7 +39,6 @@
             // informar al usuario
             echo json_encode(array("message" => "La actividad ha sido creada."));
         }
-            // si no puede crear el producto, informar al usuario
         else{
             // asignar codigo de respuesta - 503 servicio no disponible
             http_response_code(503);
